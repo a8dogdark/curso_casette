@@ -1,63 +1,43 @@
+	icl '../base/sys_equates.m65'
+	icl '../base/sys_macros.m65'
 	org $2000
-p1		= $cb
-pausa	= $cd
-dlstitulos
+dlsportada
 :3	.by $70
 	.by $46
-	.wo showtitulos
+	.wo showportada
 :10	.by $70
 	.by $06,$70,$06
 	.by $41
-	.wo dlstitulos
-showtitulos
-:3	.sb "********************"
+	.wo dlsportada
 dlscontenido
-:3 	.by $70
+:3	.by $70
 	.by $42
 	.wo showcontenido
 :22	.by $02
 	.by $41
 	.wo dlscontenido
+showportada
+:3	.sb "********************"
 showcontenido
 :23	.sb "****************************************"
-;***************************************
-; portadas
-;***************************************
-titulos
-	lda #<dlstitulos
+inicioportada
+	lda #<dlsportada
 	sta $230
-	lda #>dlstitulos
+	lda #>dlsportada
 	sta $231
 	rts
-contenido
+iniciocontenido
 	lda #<dlscontenido
 	sta $230
 	lda #>dlscontenido
 	sta $231
 	rts
-;***************************************
-; funciones
-;***************************************
-PAUSITA
-	ldx pausa
-	STX $021C
-?PAUSITA
-	LDX $021C
-	BNE ?PAUSITA
-	RTS
-reseter
-	lda #$a0
-	sta pausa
-	rts
 inicio
-	jsr reseter
-	jsr titulos
-	jsr pausita
 	
-	lda #4
+	;jsr inicioportada
+	jsr iniciocontenido
+	lda #$03
 	sta 710
 	sta 712
-	jsr contenido
-	jsr pausita
 	jmp *
 	run inicio
