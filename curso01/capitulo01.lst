@@ -1,0 +1,65 @@
+mads 2.0.6 build 58 (28 Jan 17)
+Source: C:\Users\dogdark\git\curso_casette\curso01\capitulo01.asm
+     1 					org $2000
+     2 = 00CB			p1		= $cb
+     3 = 00CD			pausa	= $cd
+     4 				dlstitulos
+     5 FFFF> 2000-2448> 70 70 + :3	.by $70
+     6 2003 46				.by $46
+     7 2004 16 20			.wo showtitulos
+     8 2006 70 70 70 70 70 70 + :10	.by $70
+     9 2010 06 70 06			.by $06,$70,$06
+    10 2013 41				.by $41
+    11 2014 00 20			.wo dlstitulos
+    12 2016			showtitulos
+    13 2016 0A 0A 0A 0A 0A 0A + :3	.sb "********************"
+    14 2052			dlscontenido
+    15 2052 70 70 70		:3 	.by $70
+    16 2055 42				.by $42
+    17 2056 71 20			.wo showcontenido
+    18 2058 02 02 02 02 02 02 + :22	.by $02
+    19 206E 41				.by $41
+    20 206F 52 20			.wo dlscontenido
+    21 2071			showcontenido
+    22 2071 0A 0A 0A 0A 0A 0A + :23	.sb "****************************************"
+    23 				;***************************************
+    24 				; portadas
+    25 				;***************************************
+    26 2409			titulos
+    27 2409 A9 00			lda #<dlstitulos
+    28 240B 8D 30 02			sta $230
+    29 240E A9 20			lda #>dlstitulos
+    30 2410 8D 31 02			sta $231
+    31 2413 60				rts
+    32 2414			contenido
+    33 2414 A9 52			lda #<dlscontenido
+    34 2416 8D 30 02			sta $230
+    35 2419 A9 20			lda #>dlscontenido
+    36 241B 8D 31 02			sta $231
+    37 241E 60				rts
+    38 				;***************************************
+    39 				; funciones
+    40 				;***************************************
+    41 241F			PAUSITA
+    42 241F A6 CD			ldx pausa
+    43 2421 8E 1C 02			STX $021C
+    44 2424			?PAUSITA
+    45 2424 AE 1C 02			LDX $021C
+    46 2427 D0 FB			BNE ?PAUSITA
+    47 2429 60				RTS
+    48 242A			reseter
+    49 242A A9 A0			lda #$a0
+    50 242C 85 CD			sta pausa
+    51 242E 60				rts
+    52 242F			inicio
+    53 242F 20 2A 24			jsr reseter
+    54 2432 20 09 24			jsr titulos
+    55 2435 20 1F 24			jsr pausita
+    56 					
+    57 2438 A9 04			lda #4
+    58 243A 8D C6 02			sta 710
+    59 243D 8D C8 02			sta 712
+    60 2440 20 14 24			jsr contenido
+    61 2443 20 1F 24			jsr pausita
+    62 2446 4C 46 24			jmp *
+    63 02E0-02E1> 2F 24			run inicio
