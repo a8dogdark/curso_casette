@@ -87,6 +87,11 @@ pausa1
 	rts
 inicio
 	jsr reseter
+	jsr portada
+	lda #$02
+	sta 710
+	sta 712
+	jsr pausa
 	jsr limpiotitulo
 	jsr iniciotitulo
 	ldx #19
@@ -108,8 +113,11 @@ tit1
 	sta 712
 	
 	jmp *
+	icl '../base/portada.asm'
 datatitulo01
 	.sb "  curso  assembler  "
 	.sb "    CAPITULO  01    "
 	.sb +128,"    introduccion    "
+conte1
+	.sb "TABLA DE CONTENIDOS"
 	run inicio
