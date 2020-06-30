@@ -381,44 +381,134 @@ Source: C:\Users\dogdark\git\curso_casette\curso01\..\base\sys_macros.m65
     18 							sta :2+1
     19 						.endif
     20 					.endm
-     3 					org $2000
-     4 				dlsportada
-     5 FFFF> 2000-242C> 70 70 + :3	.by $70
-     6 2003 46				.by $46
-     7 2004 35 20			.wo showportada
-     8 2006 70 70 70 70 70 70 + :10	.by $70
-     9 2010 06 70 06			.by $06,$70,$06
-    10 2013 41				.by $41
-    11 2014 00 20			.wo dlsportada
-    12 2016			dlscontenido
-    13 2016 70 70 70		:3	.by $70
-    14 2019 42				.by $42
-    15 201A 71 20			.wo showcontenido
-    16 201C 02 02 02 02 02 02 + :22	.by $02
-    17 2032 41				.by $41
-    18 2033 16 20			.wo dlscontenido
-    19 2035			showportada
-    20 2035 0A 0A 0A 0A 0A 0A + :3	.sb "********************"
-    21 2071			showcontenido
-    22 2071 0A 0A 0A 0A 0A 0A + :23	.sb "****************************************"
-    23 2409			inicioportada
-    24 2409 A9 00			lda #<dlsportada
-    25 240B 8D 30 02			sta $230
-    26 240E A9 20			lda #>dlsportada
-    27 2410 8D 31 02			sta $231
-    28 2413 60				rts
-    29 2414			iniciocontenido
-    30 2414 A9 16			lda #<dlscontenido
-    31 2416 8D 30 02			sta $230
-    32 2419 A9 20			lda #>dlscontenido
-    33 241B 8D 31 02			sta $231
-    34 241E 60				rts
-    35 241F			inicio
-    36 					
-    37 					;jsr inicioportada
-    38 241F 20 14 24			jsr iniciocontenido
-    39 2422 A9 03			lda #$03
-    40 2424 8D C6 02			sta 710
-    41 2427 8D C8 02			sta 712
-    42 242A 4C 2A 24			jmp *
-    43 02E0-02E1> 1F 24			run inicio
+     3 = 00CB			p1		= $cb
+     4 = 0080			temp	= $80
+     5 					org $2000
+     6 				dlstitulo
+     7 FFFF> 2000-24F0> 70 70 + :3	.by $70
+     8 2003 46				.by $46
+     9 2004 16 20			.wo showtitulo
+    10 2006 70 70 70 70 70 70 + :10	.by $70
+    11 2010 06 70 06			.by $06,$70,$06
+    12 2013 41				.by $41
+    13 2014 00 20			.wo dlstitulo
+    14 2016			showtitulo
+    15 2016 0A 0A 0A 0A 0A 0A + :3	.sb "********************"
+    16 2052			limpiotitulo
+    17 2052 A9 00			lda #$00
+    18 2054 A2 13			ldx #19
+    19 2056			limpiotitulo1
+    20 2056 9D 16 20			sta showtitulo,x
+    21 2059 9D 2A 20			sta showtitulo+20,x
+    22 205C 9D 3E 20			sta showtitulo+40,x
+    23 205F CA				dex
+    24 2060 10 F4			bpl limpiotitulo1 
+    25 2062 60				rts
+    26 2063			iniciotitulo
+    27 2063 A9 00			lda #<dlstitulo
+    28 2065 8D 30 02			sta $230
+    29 2068 A9 20			lda #>dlstitulo
+    30 206A 8D 31 02			sta $231
+    31 206D 60				rts
+    32 206E			dlscontenido
+    33 206E 70 70 70		:3	.by $70
+    34 2071 42				.by $42
+    35 2072 8D 20			.wo showcontenido
+    36 2074 02 02 02 02 02 02 + :22	.by $02
+    37 208A 41				.by $41
+    38 208B 6E 20			.wo dlscontenido
+    39 208D			showcontenido
+    40 208D 0A 0A 0A 0A 0A 0A + :23	.sb "****************************************"
+    41 2425			limpiocontenido
+    42 2425 A9 8D			lda #<showcontenido
+    43 2427 85 CB			sta p1
+    44 2429 A9 20			lda #>showcontenido
+    45 242B 85 CC			sta p1+1
+    46 242D A0 00			ldy #0
+    47 242F 84 80			sty temp
+    48 2431 84 81			sty temp+1
+    49 2433			limpiocontenido1
+    50 2433 A9 00			lda #$00
+    51 2435 91 CB			sta (p1),y
+    52 2437				suma p1,p1,1,0
+Macro: SUMA [Source: C:\Users\dogdark\git\curso_casette\curso01\..\base\sys_macros.m65]
+     4 2437 18						clc
+     5 2438 A5 CB					lda P1
+     6 243A 69 01					adc #1
+     7 243C 85 CB					sta P1
+     8 243E A5 CC					lda P1+1
+     9 2440 69 00					adc #0
+    10 2442 85 CC					sta P1+1
+Source: C:\Users\dogdark\git\curso_casette\curso01\capitulo01.asm
+    53 2444				suma temp,temp,1,0
+Macro: SUMA [Source: C:\Users\dogdark\git\curso_casette\curso01\..\base\sys_macros.m65]
+     4 2444 18						clc
+     5 2445 A5 80					lda TEMP
+     6 2447 69 01					adc #1
+     7 2449 85 80					sta TEMP
+     8 244B A5 81					lda TEMP+1
+     9 244D 69 00					adc #0
+    10 244F 85 81					sta TEMP+1
+Source: C:\Users\dogdark\git\curso_casette\curso01\capitulo01.asm
+    54 					
+    55 2451 A5 81			lda temp+1
+    56 2453 C9 03			cmp #$03
+    57 2455 D0 DC			bne limpiocontenido1
+    58 					
+    59 2457 A5 80			lda temp
+    60 2459 C9 98			cmp #$98
+    61 245B D0 D6			bne limpiocontenido1
+    62 					
+    63 245D 60				rts
+    64 245E			iniciocontenido
+    65 245E A9 6E			lda #<dlscontenido
+    66 2460 8D 30 02			sta $230
+    67 2463 A9 20			lda #>dlscontenido
+    68 2465 8D 31 02			sta $231
+    69 2468 60				rts
+    70 2469			reseter
+    71 2469 A9 00			lda #$00
+    72 246B 85 CB			sta p1
+    73 246D 85 CC			sta p1+1
+    74 246F 85 80			sta temp
+    75 2471 A9 A0			lda #$a0
+    76 2473 85 80			sta temp
+    77 2475 60				rts
+    78 				;*************************************
+    79 				; funciones
+    80 				;*************************************
+    81 2476			pausa
+    82 2476 A6 80			ldx temp
+    83 2478 8E 1C 02			stx $021c
+    84 247B			pausa1
+    85 247B AE 1C 02			ldx $021c
+    86 247E D0 FB			bne pausa1
+    87 2480 60				rts
+    88 2481			inicio
+    89 2481 20 69 24			jsr reseter
+    90 2484 20 52 20			jsr limpiotitulo
+    91 2487 20 63 20			jsr iniciotitulo
+    92 248A A2 13			ldx #19
+    93 248C			tit1
+    94 248C BD B5 24			lda datatitulo01,x
+    95 248F 9D 16 20			sta showtitulo,x
+    96 2492 BD C9 24			lda datatitulo01+20,x
+    97 2495 9D 2A 20			sta showtitulo+20,x
+    98 2498 BD DD 24			lda datatitulo01+40,x
+    99 249B 9D 3E 20			sta showtitulo+40,x
+   100 249E CA				dex
+   101 249F 10 EB			bpl tit1
+   102 24A1 20 76 24			jsr pausa
+   103 					
+   104 24A4 20 5E 24			jsr iniciocontenido
+   105 24A7 20 25 24			jsr limpiocontenido
+   106 24AA A9 02			lda #$02
+   107 24AC 8D C6 02			sta 710
+   108 24AF 8D C8 02			sta 712
+   109 					
+   110 24B2 4C B2 24			jmp *
+   111 24B5			datatitulo01
+   112 24B5 00 00 63 75 72 73 + 	.sb "  curso  assembler  "
+   113 24C9 00 00 00 00 23 21 + 	.sb "    CAPITULO  01    "
+   114 24DD 80 80 80 80 E9 EE + 	.sb +128,"    introduccion    "
+   115 02E0-02E1> 81 24			run inicio
